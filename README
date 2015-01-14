@@ -1,0 +1,59 @@
+This script call for  ruby and the gem json [gem install json]
+
+These are not necessary - you can parse json any way you want, but you can't use
+my script if you don't have these.
+
+Downloading from echo 360 center is a pain
+here is a hack to get the files you need
+first locate the sectionid of the course you want to download.
+Example: http://recordings.engineering.illinois.edu/ess/portal/section/7dc02000-0660-4eb9-9e7c-5134ff084e5d
+
+the section id here is: 7dc02000-0660-4eb9-9e7c-5134ff084e5d
+
+next go here
+
+http://recordings.engineering.illinois.edu/ess/client/api/sections/7dc02000-0660-4eb9-9e7c-5134ff084e5d/section-data.json?pageIndex=1&pageSize=1000
+
+notice the section id in the url - replace this with your section id.
+place the section id into data.json in the same directory as this script
+
+Now I will get you the links of all the videos to download.
+
+You can now use your favorite download manager to download all the things
+
+I recommend doing the following. 
+
+Install aria2c - a multipart multconnection download manager
+mkdir stuff
+touch stuff/media.m4v
+aria2c -j16 -x16 -X -i output -d stuff
+
+
+This will download all the files very quickly. DONT DO THIS ON YOUR OWN COMPUTER
+- unless you have fast up speed or want the files on your own computer. I
+  recommend storing this in the cloud - s3. So you probably want something that
+  gives you fast up link like ews or digitalocean.
+
+once you have the downloads - you may want to clean it by trimming the part that
+you dont want.
+
+for example
+ffmpeg -i 1.m4v -y -vcodec copy -acodec copy -ss  00:14:50 -t 01:33:00 _1.m4v
+
+will get you the part between 00:14:50 to 01:33:00
+
+you may even play around with compression
+
+ffmpeg -i 1.m4v -c copy -c:v libx264 -crf 40 -preset ultrafast 1-lq.mp4
+
+# you can get ffmpeg form here http://johnvansickle.com/ffmpeg/
+
+now upload to s3 with something like s3cmd
+
+so apt-get install s3cmd and 
+s3cmd sync -Pr --skip-existing stuff --continue s3://uiuc-courses/DataStructures.225.2013.CindaHeeran
+
+and now you can watch the lectures from anywhere. 
+
+Enjoy.
+
