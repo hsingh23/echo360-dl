@@ -24,10 +24,14 @@ You can now use your favorite download manager to download all the things
 I recommend doing the following. 
 
 Install aria2c - a multipart multconnection download manager
+
+./publish.rb
 mkdir stuff
 touch stuff/media.m4v
-aria2c -j16 -x16 -X -i output -d stuff
+aria2c -j16 -x16 -Z -i output -d stuff
 
+
+cd stuff; rm media.m4v; rename  's/media.m4v.//' *;rename  's/$/.mp4/' *;
 
 This will download all the files very quickly. DONT DO THIS ON YOUR OWN COMPUTER
 - unless you have fast up speed or want the files on your own computer. I
